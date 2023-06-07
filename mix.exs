@@ -46,7 +46,10 @@ defmodule Paradise.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:cubdb, "~> 2.0"},
+      {:puid, "~> 2.1"},
+      {:typed_struct, "~> 0.3.0"}
     ]
   end
 
