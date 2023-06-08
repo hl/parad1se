@@ -35,3 +35,5 @@ paradise-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# CubDB
+data/

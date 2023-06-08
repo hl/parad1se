@@ -15,9 +15,11 @@ defmodule Paradise.Application do
       # Start Finch
       {Finch, name: Paradise.Finch},
       # Start the Endpoint (http/https)
-      ParadiseWeb.Endpoint
-      # Start a worker by calling: Paradise.Worker.start_link(arg)
-      # {Paradise.Worker, arg}
+      ParadiseWeb.Endpoint,
+      # CubDB
+      {CubDB, [data_dir: "data", name: Paradise.Repo]},
+      # Process Registry
+      {Registry, [keys: :unique, name: Paradise.Registry]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
