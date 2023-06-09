@@ -13,6 +13,11 @@ defmodule Paradise.Repo do
     CubDB.get(__MODULE__, {name, id})
   end
 
+  @spec get!(module(), String.t()) :: struct()
+  def get!(name, id) do
+    get(name, id) || raise "#{name} with #{id} not found"
+  end
+
   @spec find_by(module(), String.t(), any()) :: {:ok, struct()} | :error
   def find_by(name, key, value) do
     __MODULE__
