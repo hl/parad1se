@@ -5,7 +5,7 @@ defmodule Paradise.MixProject do
     [
       app: :paradise,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),

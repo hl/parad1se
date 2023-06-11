@@ -8,8 +8,9 @@ defmodule Paradise.Planet do
   typedstruct opaque: true do
     field :id, String.t(), enforce: true
     field :name, String.t(), enforce: true
-    field :class, atom(), enforce: true
-    field :resources, [Paradise.PlanetResource.t()]
+    field :class, String.t, enforce: true
+    field :resources, [__MODULE__.Resource.t()]
+    field :map, [__MODULE__.Map.t]
   end
 
   @spec new(Keyword.t() | map()) :: t()
