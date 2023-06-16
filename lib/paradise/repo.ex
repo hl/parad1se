@@ -1,20 +1,29 @@
 defmodule Paradise.Repo do
   @moduledoc """
-  CubDB Repo
+  Repository
   """
 
-  @spec put(struct()) :: :ok
-  def put(%{__struct__: name, id: id} = struct) when is_binary(id) do
-    CubDB.put(__MODULE__, {name, id}, struct)
+  alias Paradise.AstronautState
+  alias Paradise.PlanetState
+
+  @type id :: AstronautState.id() | PlanetState.id()
+  @type record :: AstronautState.t() | PlanetState.t()
+
+  @spec put(id(), record()) :: :ok
+  def put(id, state) do
+    CubDB.put(__MODULE__, id, state)
   end
 
-  @spec get(atom(), String.t()) :: struct() | nil
-  def get(name, id) do
-    CubDB.get(__MODULE__, {name, id})
+  @spec get(id()) :: record() | nil
+  def get(id) do
+    CubDB.get(__MODULE__, id)
   end
 
-  @spec get!(atom(), String.t()) :: struct()
-  def get!(name, id) do
-    get(name, id) || raise "#{name} with #{id} not found"
+  @spec get!(id()) :: record()
+  def get!(id) do
+    case get(id) do
+      nil -> raise "#{id} not found"
+      state -> state
+    end
   end
 end

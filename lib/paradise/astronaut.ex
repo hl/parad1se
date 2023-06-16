@@ -1,16 +1,35 @@
 defmodule Paradise.Astronaut do
-  use TypedStruct
-  use Puid, chars: :safe32
+  @moduledoc """
+  Astronaut Context
+  """
 
-  typedstruct opaque: true do
-    field :id, String.t(), enforce: true
-    field :name, String.t(), enforce: true
-    field :credits, non_neg_integer(), default: 0
+  alias Paradise.AstronautServer
+  alias Paradise.AstronautState
+  alias Paradise.AstronautStorage
+  alias Paradise.DynamicSupervisors
+  alias Paradise.Registry
+
+  @spec start_server(AstronautState.id()) :: {:ok, pid} | :ignore
+  def start_server(astronaut_id) do
+    child_spec = AstronautServer.child_spec(astronaut_id: astronaut_id)
+    DynamicSupervisors.start_child(child_spec)
   end
 
-  @spec new(Keyword.t() | map()) :: t()
-  def new(args) do
-    map = Enum.into(args, %{id: generate()})
-    struct!(__MODULE__, map)
+  @spec stop_server(AstronautState.id()) :: :ok | {:error, :not_found} | :undefined
+  def stop_server(astronaut_id) do
+    pid = Registry.whereis_name(astronaut_id)
+    DynamicSupervisors.terminate_child(pid)
+  end
+
+  @spec change_name(AstronautState.id(), String.t()) :: :ok | :undefined
+  def change_name(astronaut_id, name) do
+    pid = Registry.whereis_name(astronaut_id)
+    AstronautServer.change_name(pid, name)
+  end
+
+  @spec get_name(AstronautState.id()) :: String.t()
+  def get_name(astronaut_id) do
+    state = AstronautStorage.get!(astronaut_id)
+    AstronautState.name(state)
   end
 end

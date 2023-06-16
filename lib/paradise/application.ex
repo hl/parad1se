@@ -19,7 +19,12 @@ defmodule Paradise.Application do
       # CubDB
       {CubDB, [data_dir: "data", name: Paradise.Repo]},
       # Process Registry
-      {Registry, [keys: :unique, name: Paradise.Registry]}
+      {Registry, [keys: :unique, name: Paradise.Registry]},
+      # Partition Supervisors
+      {PartitionSupervisor, child_spec: DynamicSupervisor, name: Paradise.DynamicSupervisors},
+      # ETS
+      {Paradise.AstronautStorage, []},
+      {Paradise.PlanetStorage, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

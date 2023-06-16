@@ -56,6 +56,18 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Astronaut Storage
+config :paradise, Paradise.AstronautStorage,
+  name: :astronauts,
+  protection: :public,
+  read_concurrency: true
+
+# Planet Storage
+config :paradise, Paradise.PlanetStorage,
+  name: :planets,
+  protection: :public,
+  read_concurrency: true
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

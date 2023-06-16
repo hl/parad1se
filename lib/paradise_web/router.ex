@@ -20,6 +20,10 @@ defmodule ParadiseWeb.Router do
     get "/", PageController, :home
   end
 
+  scope "/", ParadiseWeb do
+    live "/dashboard", AstronautDashboardLive
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", ParadiseWeb do
   #   pipe_through :api
