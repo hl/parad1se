@@ -33,7 +33,7 @@ defmodule Paradise.PlanetStorage do
 
   @impl GenServer
   def handle_cast({:put, key, value}, set) do
-    KeyValueSet.put(set, key, value)
+    KeyValueSet.put!(set, key, value)
     {:noreply, set}
   end
 end
