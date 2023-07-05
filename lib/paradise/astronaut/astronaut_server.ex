@@ -116,8 +116,8 @@ defmodule Paradise.AstronautServer do
     Process.send_after(self(), :checks, checks_interval)
   end
 
-  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.AstronautRegistry, String.t()}}
+  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.Registry, String.t()}}
   def via_tuple(name) do
-    {:via, Registry, {Paradise.AstronautRegistry, name}}
+    {:via, Registry, {Paradise.Registry, name}}
   end
 end

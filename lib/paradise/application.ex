@@ -17,12 +17,11 @@ defmodule Paradise.Application do
       # Start the Endpoint (http/https)
       ParadiseWeb.Endpoint,
       # CubDB
-      {CubDB, [data_dir: "data", name: Paradise.Repo]},
+      {CubDB, cubdb_config()},
       # Process Registry
       {Registry, [keys: :unique, name: Paradise.Registry]},
       # Partition Supervisors
-      {PartitionSupervisor, child_spec: DynamicSupervisor, name: Paradise.AstronautDynamicSupervisors},
-      {PartitionSupervisor, child_spec: DynamicSupervisor, name: Paradise.PlanetDynamicSupervisors},
+      {PartitionSupervisor, child_spec: DynamicSupervisor, name: Paradise.DynamicSupervisors},
       # ETS
       {Paradise.AstronautStorage, []},
       {Paradise.PlanetStorage, []}
@@ -40,5 +39,10 @@ defmodule Paradise.Application do
   def config_change(changed, _new, removed) do
     ParadiseWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  @spec cubdb_config() :: Keyword.t()
+  def cubdb_config do
+    Application.get_env(:paradise, CubDB)
   end
 end

@@ -62,6 +62,11 @@ config :paradise, Paradise.AstronautStorage,
   protection: :public,
   read_concurrency: true
 
+# CubDB
+config :paradise, CubDB,
+  data_dir: "data",
+  name: Paradise.Repo
+
 # Planet Storage
 config :paradise, Paradise.PlanetStorage,
   name: :planets,

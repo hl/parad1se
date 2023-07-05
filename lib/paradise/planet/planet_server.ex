@@ -73,8 +73,8 @@ defmodule Paradise.PlanetServer do
     reason
   end
 
-  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.PlanetRegistry, String.t()}}
+  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.Registry, String.t()}}
   def via_tuple(name) do
-    {:via, Registry, {Paradise.PlanetRegistry, name}}
+    {:via, Registry, {Paradise.Registry, name}}
   end
 end

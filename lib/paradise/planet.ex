@@ -11,7 +11,7 @@ defmodule Paradise.Planet do
     child_spec = PlanetServer.child_spec(planet_id: planet_id)
 
     DynamicSupervisor.start_child(
-      {:via, PartitionSupervisor, {Paradise.PlanetDynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
       child_spec
     )
   end
@@ -21,14 +21,14 @@ defmodule Paradise.Planet do
     pid = whereis_name(planet_id)
 
     DynamicSupervisor.terminate_child(
-      {:via, PartitionSupervisor, {Paradise.PlanetDynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
       pid
     )
   end
 
   @spec whereis_name(String.t()) :: pid() | :undefined
   def whereis_name(name) do
-    with [{pid, _value}] when is_pid(pid) <- Registry.lookup(Paradise.PlanetRegistry, name),
+    with [{pid, _value}] when is_pid(pid) <- Registry.lookup(Paradise.Registry, name),
          true <- Process.alive?(pid) do
       pid
     else

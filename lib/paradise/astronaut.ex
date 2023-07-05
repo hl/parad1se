@@ -12,7 +12,7 @@ defmodule Paradise.Astronaut do
     child_spec = AstronautServer.child_spec(astronaut_id: astronaut_id)
 
     DynamicSupervisor.start_child(
-      {:via, PartitionSupervisor, {Paradise.AstronautDynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
       child_spec
     )
   end
@@ -22,7 +22,7 @@ defmodule Paradise.Astronaut do
     pid = whereis_name(astronaut_id)
 
     DynamicSupervisor.terminate_child(
-      {:via, PartitionSupervisor, {Paradise.AstronautDynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
       pid
     )
   end
@@ -41,7 +41,7 @@ defmodule Paradise.Astronaut do
 
   @spec whereis_name(String.t()) :: pid() | :undefined
   def whereis_name(name) do
-    with [{pid, _value}] when is_pid(pid) <- Registry.lookup(Paradise.AstronautRegistry, name),
+    with [{pid, _value}] when is_pid(pid) <- Registry.lookup(Paradise.Registry, name),
          true <- Process.alive?(pid) do
       pid
     else
