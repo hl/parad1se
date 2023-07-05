@@ -38,9 +38,7 @@ defmodule Paradise.AstronautServer do
 
   @spec start_link(AstronautState.id()) :: GenServer.on_start()
   def start_link(astronaut_id) do
-    name = Registry.via_tuple(astronaut_id)
-
-    case GenServer.start_link(__MODULE__, astronaut_id, name: name) do
+    case GenServer.start_link(__MODULE__, astronaut_id, name: via_tuple(astronaut_id)) do
       {:ok, pid} ->
         {:ok, pid}
 
@@ -113,7 +111,13 @@ defmodule Paradise.AstronautServer do
     reason
   end
 
+  @spec schedule_checks(non_neg_integer()) :: reference()
   def schedule_checks(checks_interval) do
     Process.send_after(self(), :checks, checks_interval)
+  end
+
+  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.AstronautRegistry, String.t()}}
+  def via_tuple(name) do
+    {:via, Registry, {Paradise.AstronautRegistry, name}}
   end
 end

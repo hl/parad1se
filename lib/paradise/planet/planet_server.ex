@@ -7,7 +7,6 @@ defmodule Paradise.PlanetServer do
 
   alias Paradise.PlanetState
   alias Paradise.PlanetStorage
-  alias Paradise.Registry
   alias Paradise.Repo
 
   require Logger
@@ -36,9 +35,7 @@ defmodule Paradise.PlanetServer do
 
   @spec start_link(PlanetState.id()) :: GenServer.on_start()
   def start_link(planet_id) do
-    name = Registry.via_tuple(planet_id)
-
-    case GenServer.start_link(__MODULE__, planet_id, name: name) do
+    case GenServer.start_link(__MODULE__, planet_id, name: via_tuple(planet_id)) do
       {:ok, pid} ->
         {:ok, pid}
 
@@ -74,5 +71,10 @@ defmodule Paradise.PlanetServer do
   def terminate(reason, planet_id) do
     persist_state(planet_id)
     reason
+  end
+
+  @spec via_tuple(String.t()) :: {:via, Registry, {Paradise.PlanetRegistry, String.t()}}
+  def via_tuple(name) do
+    {:via, Registry, {Paradise.PlanetRegistry, name}}
   end
 end
