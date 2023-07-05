@@ -1,4 +1,4 @@
-defmodule Paradise.DynamicSupervisors do
+defmodule Paradise.PlanetDynamicSupervisors do
   @moduledoc """
   DynamicSupervisor helper functions
   """
@@ -6,7 +6,7 @@ defmodule Paradise.DynamicSupervisors do
   @spec start_child(Supervisor.child_spec()) :: Supervisor.on_start_child()
   def start_child(child_spec) do
     DynamicSupervisor.start_child(
-      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {__MODULE__, self()}},
       child_spec
     )
   end
@@ -14,7 +14,7 @@ defmodule Paradise.DynamicSupervisors do
   @spec terminate_child(pid()) :: :ok | {:error, :not_found}
   def terminate_child(pid) do
     DynamicSupervisor.terminate_child(
-      {:via, PartitionSupervisor, {Paradise.DynamicSupervisors, self()}},
+      {:via, PartitionSupervisor, {__MODULE__, self()}},
       pid
     )
   end

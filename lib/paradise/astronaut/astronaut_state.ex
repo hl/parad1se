@@ -22,6 +22,10 @@ defmodule Paradise.AstronautState do
     struct!(__MODULE__, map)
   end
 
+  @spec changed?(t(), t()) :: boolean()
+  def changed?(state, state), do: true
+  def changed?(_state, _updated_state), do: false
+
   @spec id(t()) :: id()
   def id(%__MODULE__{id: id}), do: id
 

@@ -3,22 +3,22 @@ defmodule Paradise.Astronaut do
   Astronaut Context
   """
 
+  alias Paradise.AstronautDynamicSupervisors
   alias Paradise.AstronautServer
   alias Paradise.AstronautState
   alias Paradise.AstronautStorage
-  alias Paradise.DynamicSupervisors
   alias Paradise.Registry
 
   @spec start_server(AstronautState.id()) :: {:ok, pid} | :ignore
   def start_server(astronaut_id) do
     child_spec = AstronautServer.child_spec(astronaut_id: astronaut_id)
-    DynamicSupervisors.start_child(child_spec)
+    AstronautDynamicSupervisors.start_child(child_spec)
   end
 
   @spec stop_server(AstronautState.id()) :: :ok | {:error, :not_found} | :undefined
   def stop_server(astronaut_id) do
     pid = Registry.whereis_name(astronaut_id)
-    DynamicSupervisors.terminate_child(pid)
+    AstronautDynamicSupervisors.terminate_child(pid)
   end
 
   @spec change_name(AstronautState.id(), String.t()) :: :ok | :undefined

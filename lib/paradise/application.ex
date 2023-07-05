@@ -21,7 +21,8 @@ defmodule Paradise.Application do
       # Process Registry
       {Registry, [keys: :unique, name: Paradise.Registry]},
       # Partition Supervisors
-      {PartitionSupervisor, child_spec: DynamicSupervisor, name: Paradise.DynamicSupervisors},
+      {PartitionSupervisor, child_spec: DynamicSupervisor, name: AstronautDynamicSupervisors},
+      {PartitionSupervisor, child_spec: DynamicSupervisor, name: PlanetDynamicSupervisors},
       # ETS
       {Paradise.AstronautStorage, []},
       {Paradise.PlanetStorage, []}

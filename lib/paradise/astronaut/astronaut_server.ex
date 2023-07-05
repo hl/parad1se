@@ -69,7 +69,7 @@ defmodule Paradise.AstronautServer do
     state = Repo.get!(astronaut_id)
     AstronautStorage.put(astronaut_id, state)
 
-    Process.send_after(self(), :checks, @checks_interval)
+    schedule_checks(@checks_interval)
 
     {:noreply, astronaut_id}
   end
@@ -82,26 +82,38 @@ defmodule Paradise.AstronautServer do
   @impl GenServer
   def handle_info(:checks, astronaut_id) do
     state = AstronautStorage.get!(astronaut_id)
-    state = AstronautState.perform_checks(state)
-    AstronautStorage.put(astronaut_id, state)
+    updated_state = AstronautState.perform_checks(state)
 
-    Process.send_after(self(), :checks, @checks_interval)
-
-    {:noreply, state}
+    if AstronautState.changed?(state, updated_state) do
+      AstronautStorage.put(astronaut_id, updated_state)
+      schedule_checks(@checks_interval)
+      {:noreply, astronaut_id, {:continue, :persist_state}}
+    else
+      schedule_checks(@checks_interval)
+      {:noreply, astronaut_id}
+    end
   end
 
   @impl GenServer
   def handle_cast({:change_name, name}, astronaut_id) do
     state = AstronautStorage.get!(astronaut_id)
-    state = AstronautState.name(state, name)
-    AstronautStorage.put(astronaut_id, state)
+    updated_state = AstronautState.name(state, name)
 
-    {:noreply, astronaut_id, {:continue, :persist_state}}
+    if AstronautState.changed?(state, updated_state) do
+      AstronautStorage.put(astronaut_id, updated_state)
+      {:noreply, astronaut_id, {:continue, :persist_state}}
+    else
+      {:noreply, astronaut_id}
+    end
   end
 
   @impl GenServer
   def terminate(reason, astronaut_id) do
     persist_state(astronaut_id)
     reason
+  end
+
+  def schedule_checks(checks_interval) do
+    Process.send_after(self(), :checks, checks_interval)
   end
 end
