@@ -14,7 +14,7 @@ defmodule Paradise.PlanetState do
 
   @spec new(Keyword.t() | map()) :: t()
   def new(args) do
-    map = Enum.into(args, %{id: "p-" <> generate()})
+    map = Enum.into(args, %{id: generate()})
     struct!(__MODULE__, map)
   end
 

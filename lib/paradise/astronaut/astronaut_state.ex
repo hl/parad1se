@@ -18,13 +18,13 @@ defmodule Paradise.AstronautState do
 
   @spec new(Keyword.t() | map()) :: t()
   def new(args) do
-    map = Enum.into(args, %{id: "a-" <> generate()})
+    map = Enum.into(args, %{id: generate()})
     struct!(__MODULE__, map)
   end
 
   @spec changed?(t(), t()) :: boolean()
-  def changed?(state, state), do: true
-  def changed?(_state, _updated_state), do: false
+  def changed?(state, state), do: false
+  def changed?(_state, _updated_state), do: true
 
   @spec id(t()) :: id()
   def id(%__MODULE__{id: id}), do: id
