@@ -29,8 +29,8 @@ defmodule Paradise.Astronaut do
 
   @spec change_name(AstronautState.id(), String.t()) :: :ok | :undefined
   def change_name(astronaut_id, name) do
-    pid = whereis_name(astronaut_id)
-    AstronautServer.change_name(pid, name)
+    server = whereis_name(astronaut_id)
+    AstronautServer.change_name(server, name)
   end
 
   @spec get_name(AstronautState.id()) :: String.t()

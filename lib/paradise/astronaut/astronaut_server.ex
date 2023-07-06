@@ -7,7 +7,6 @@ defmodule Paradise.AstronautServer do
 
   alias Paradise.AstronautState
   alias Paradise.AstronautStorage
-  alias Paradise.Registry
   alias Paradise.Repo
 
   require Logger
@@ -49,8 +48,8 @@ defmodule Paradise.AstronautServer do
   end
 
   @spec change_name(pid(), String.t()) :: :ok
-  def change_name(pid, name) do
-    GenServer.cast(pid, {:change_name, name})
+  def change_name(server, name) when is_pid(server) do
+    GenServer.cast(server, {:change_name, name})
   end
 
   # Server
